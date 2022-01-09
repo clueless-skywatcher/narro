@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h1>Change Profile Card</h1>
+    <div class="gallery-section show-two-per-line">
+        {% for profile_card in profile_cards %}
+            <div class="prof-card">
+                <img src="{{ profile_card|get_item:ProfCardImgURL }}" width="259" height="65"><br><br>
+                <a href=""><h3>{{ profile_card|get_item:ProfCardName }}</h3></a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

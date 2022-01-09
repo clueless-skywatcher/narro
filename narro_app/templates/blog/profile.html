@@ -1,0 +1,81 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}BitBlog - {{ username }}{% endblock %}
+
+{% block content %}
+<article class="media content-section">
+	<img class = "account-img size-128" src="{{ sigil_img_url }}">
+	<div class="media-body">
+		<h1>{{ username }}</h1>
+		<img src="{{ profcard_img_url }}" width="259" height="65"><br><br>
+		<small class="text-muted">Description</small>
+		<p class="article-content">{{ desc }}</p>
+		<small class="text-muted">Hometown</small>
+		<p class="article-content">{{ hometown }}</p>
+		{% if birth_date %}
+			<small class="text-muted">Birth Date</small>
+			<p class="article-content">{{ birth_date }}</p>
+		{% endif %}
+	</div>
+</article>
+{% if posts %}
+	<div class="content-section">
+		{% for post in page_obj %}
+			<article class="media content-section">
+				<img class = "account-img size-48" src="{{ post.author.bloguser.current_sigil.img.url }}">
+				<div class="media-body">
+					<div class="article-metadata">
+						<a class="mr-2" href="{% url 'profile' post.author.username %}">{{ post.author }}</a>
+						<img src = "{{ post.author.bloguser.current_profile_card.img.url }}" class="prof-card-small">
+						<small class="text-muted">{{ post.post_date }}</small>
+					</div>
+					<h2><a class="article-title" href="{% url 'post' post.id %}">{{ post.title }}</a></h2>
+					<p class="article-content">{{ post.content | safe | linebreaks | truncatewords:"100" }}</p>
+					<small class="text-muted">{{ post.blogcomment_set.count }} Comment(s)</small>
+				</div>
+			</article>
+		{% endfor %}
+		{% if page_obj.has_other_pages  %}
+			{% if page_obj.has_previous %}
+				<a href="?page=1" class="btn btn-outline-info mb-4">First</a>
+				<a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-info mb-4">Previous</a>
+			{% endif %}
+			{% for num in page_obj.paginator.page_range %}
+				{% if page_obj.number == num %}
+					<a href="?page={{ num }}" class="btn btn-info mb-4">{{ num }}</a>
+				{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+					<a href="?page={{ num }}" class="btn btn-outline-info mb-4">{{ num }}</a>
+				{% endif %}
+			{% endfor %}
+			{% if page_obj.has_next %}
+				<a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-info mb-4">Next</a>
+				<a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-info mb-4">Last</a>
+			{% endif %}
+		{% endif %}
+	</div>
+{% endif %}
+{% endblock %}
+{% block sidebar %}
+	<div class="content-section">
+    	<h3>Details</h3>
+    	<ul class="list-group">
+        	<li class="list-group-item list-group-item-light">{{ profile_user.blogpost_set.count }} post(s)</li>
+        	<li class="list-group-item list-group-item-light">{{ profile_user.score }} total score</li>
+        	<li class="list-group-item list-group-item-light"><a href="">{{ profile_user.followers.count }} follower(s)</a></li>
+        	<li class="list-group-item list-group-item-light"><a href="">{{ profile_user.following.count }} following</a></li>
+        	{% if profile_user == user and user.is_authenticated %}
+				<li class="list-group-item list-group-item-light"><a href="">Update Profile</a></li>
+				<li class="list-group-item list-group-item-light"><a href="">View/Change Profile Cards</a></li>
+				<li class="list-group-item list-group-item-light"><a href="">View/Change Sigils</a></li>
+        	{% endif %}
+        	{% if profile_user != user and user.is_authenticated %}
+        		{% if following %}
+        			<li class="list-group-item list-group-item-light"><a href="" class="text-danger">Unfollow</a></li>
+        		{% else %}
+        			<li class="list-group-item list-group-item-light"><a href="">Follow</a></li>
+        		{% endif %}
+			{% endif %}
+      	</ul>
+        </p>
+  	</div>
+{% endblock %}

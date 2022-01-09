@@ -1,0 +1,56 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Bitblog - Home{% endblock %}
+
+{% block content %}
+	{% for post in posts %}
+		<article class="media content-section">
+			<img class = "account-img size-48" src="{{ post.author.bloguser.current_sigil.img.url }}">
+			<div class="media-body">
+				<div class="article-metadata">
+					<a class="mr-2" href="{% url 'profile' post.author.username %}">{{ post.author }}</a>
+					<img src = "{{ post.author.bloguser.current_profile_card.img.url }}" class="prof-card-small">
+					<small class="text-muted">{{ post.post_date }}</small>
+				</div>
+				<hr>
+				<h2><a class="article-title" href="{% url 'post' post.id %}">{{ post.title }}</a></h2>
+				<p class="article-content">{{ post.content | safe | linebreaks | truncatewords:"100" }}</p>
+				<small class="text-muted">{{ post.blogcomment_set.count }} Comment(s)</small>
+			</div>
+		</article>
+	{% endfor %}
+	{% if is_paginated %}
+		{% if page_obj.has_previous %}
+			<a href="?page=1" class="btn btn-outline-info mb-4">First</a>
+			<a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-info mb-4">Previous</a>
+		{% endif %}
+		{% for num in page_obj.paginator.page_range %}
+			{% if page_obj.number == num %}
+				<a href="?page={{ num }}" class="btn btn-info mb-4">{{ num }}</a>
+			{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+				<a href="?page={{ num }}" class="btn btn-outline-info mb-4">{{ num }}</a>
+			{% endif %}
+		{% endfor %}
+		{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-info mb-4">Next</a>
+			<a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-info mb-4">Last</a>
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block sidebar %}
+	<div class="content-section">
+		{% if user.is_authenticated %}
+	    	<h3>Welcome {{ user.username }}!</h3>
+	    	<ul class="list-group">
+	    		<li class="list-group-item list-group-item-light"><a href="">Top 10 posts</a></li>
+	        	<li class="list-group-item list-group-item-light"><a href="{% url 'post-create' %}">Create Post</a></li>
+	        	<li class="list-group-item list-group-item-light"><a href="{% url 'profile' user.username %}">Check Profile</a></li>
+	      	</ul>
+      	{% else %}
+      		<ul class="list-group">
+      			<li class="list-group-item list-group-item-light"><a href="">Top 10 posts</a></li>
+      		</ul>
+      	{% endif %}
+  	</div>
+{% endblock %}

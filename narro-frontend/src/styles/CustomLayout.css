@@ -1,0 +1,27 @@
+.header {
+    position:fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    background-color:#7c43bd;
+    height: 66px;
+}
+
+.layout {
+    margin-top: 60px;
+}
+
+.content { 
+    padding: 50px; 
+    background-color: #39024d;
+}
+
+.custom-class {
+    background-color:#7c43bd;
+}
+
+.custom-class-item:hover{
+    background-color: violet;
+}

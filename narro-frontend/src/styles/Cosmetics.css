@@ -1,0 +1,49 @@
+.prof-card {
+    text-align: center;
+    background-color: #333333;
+}
+
+.ant-card-meta-title {
+    color: white;
+    font-size: 18px;
+}
+
+.ant-card {
+    height: 130px;
+    margin: 2px;
+    width: 259px;
+    border-radius: 0px;
+}
+
+.sigil {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.sigil-img {
+    max-width: 80px;
+    max-height: 80px;
+    height: auto;
+    width: auto;
+}
+
+#components-grid-demo-playground [class~='ant-col'] {
+    background: transparent;
+}
+#components-grid-demo-playground [class~='ant-col'] > div {
+    height: 120px;
+    font-size: 14px;
+    line-height: 120px;
+    background: #0092ff;
+}
+#components-grid-demo-playground pre {
+    padding: 8px 16px;
+    font-size: 13px;
+}
+#components-grid-demo-playground pre.demo-code {
+    direction: ltr;
+}
+#components-grid-demo-playground .ant-col {
+    padding: 0;
+}
